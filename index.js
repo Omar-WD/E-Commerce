@@ -15,7 +15,7 @@ const app = express();
 app.use(cors
     (
         {
-            origin: 'http://localhost:5173',
+            origin: ['http://localhost:5173','https://e-commerce-kbkd.onrender.com'],
             credentials: true,
         }
 )
