@@ -40,6 +40,7 @@ export default function ProductView({ products }) {
       qty: 1,
     };
     setOrder([...order, orderItem]);
+    navigate("/")
   };
 
   const handleConfirmAddSize = async(newSize,sizeQty) => {

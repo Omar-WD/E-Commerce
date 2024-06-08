@@ -2,7 +2,7 @@
 
 import { useState, useContext } from "react";
 import { OrderContext } from "../context/OrderProvider";
-
+import { useNavigate } from "react-router-dom";
 export default function ProductQuickView({
   product,
   quickViewDisplay,
@@ -11,6 +11,7 @@ export default function ProductQuickView({
   const [selectedSize, setSlectedSize] = useState("");
   const [disableButton, setDisableButton] = useState(true);
   const { order, setOrder } = useContext(OrderContext);
+  const navigate=useNavigate()
 
   const handleSelectSize = (e) => {
     setSlectedSize(e.target.textContent);
@@ -28,6 +29,7 @@ export default function ProductQuickView({
     };
     setOrder([...order, orderItem]);
     setQuickViewDisplay("hidden");
+    navigate("/")
   };
 
  
