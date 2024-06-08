@@ -7,6 +7,7 @@ const productRouter = require("./routers/products");
 const userRouter = require("./routers/users");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const port = process.env.PORT || 5000;
+const path = require("path");
 require("./db");
 
 const app = express();
