@@ -1,7 +1,6 @@
 import { useContext, useState } from "react";
 import { OrderContext } from "../context/OrderProvider";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { axiosClient } from "../axiosClient";
 
@@ -55,8 +54,8 @@ export default function CheckOut() {
         phone: phone,
         email: email,
       };
-      const response = await axios.post(
-        "http://localhost:4500/api/payment/create-payment-intent",
+      const response = await axiosClient.post(
+        "/payment/create-payment-intent",
         {
           amount: Math.round(amount * 100),
         }

@@ -2,13 +2,13 @@
 import { useParams } from "react-router-dom";
 import { useContext, useState } from "react";
 import { OrderContext } from "../context/OrderProvider";
-import axios from "axios";
 import { ProductContext } from "../context/ProductProvider";
 import { UserContext } from "../context/UserProvider";
 import AddSizeForm from "./AddSizeForm";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import { axiosClient } from "../axiosClient";
 
 export default function ProductView({ products }) {
   const { _id } = useParams();
@@ -46,7 +46,7 @@ export default function ProductView({ products }) {
     
     if (newSize && sizeQty && product.sizes.find(size=>size.size===newSize)) {
      try {
-      axios.put(`http://localhost:4500/api/products/update-quantities`,{
+      axiosClient.put(`/products/update-quantities`,{
         items: [{
           productId: product._id,
           sizes: [{size:Number(newSize),qty:Number(sizeQty)}]
@@ -62,7 +62,7 @@ export default function ProductView({ products }) {
   }else if(newSize && sizeQty && product.sizes.find(size=>size.size!= newSize)){
     
     try {
-      axios.put(`http://localhost:4500/api/products/update-quantities`,{
+      axiosClient.put(`/products/update-quantities`,{
         items: [{
           productId: product._id,
           sizes: [{size:Number(newSize),qty:Number(sizeQty)}]
