@@ -1,0 +1,21 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "index.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/" }
+  ],
+
+    "env": {
+        "PORT": 4500,
+        "MONGO_URI": "mongodb+srv://omarzoubi2023:FGcWviPWq5scYk0q@cluster0.u1uxjip.mongodb.net/ECommerce",
+        "STRIPE_SECRET_KEY": "sk_test_51PG7KNRtQ779lAIScS98pwFZeda3z2d6FI49feBrKopOTkXxt1MGbJu88bqCtsLHAXIjvVWZPfnYp2zvA6hWfsRL0044aESM3p",
+        "ACCESS_TOKEN_SECRET": "7f7b3b1b-1b7b-4b7b-8b7b-9b7b7b7b7b7b",
+        "CLOUDINARY_CLOUD_NAME": "dnsdicfot",
+        "CLOUDINARY_API_KEY": "869517761548747",
+        "CLOUDINARY_API_SECRET": "GNZrO_TaHpiduaHFTDq5ZK6cPc4"     
+    }
+  }
+  
