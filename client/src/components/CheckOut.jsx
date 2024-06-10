@@ -201,6 +201,7 @@ export default function CheckOut() {
                         lineHeight: "30px",
                         backgroundColor: "#fff",
                         width: "100%",
+                        heigh: "50px",
                         color: "#424770",
                         "::placeholder": {
                           color: "#aab7c4",
@@ -211,7 +212,7 @@ export default function CheckOut() {
                       },
                     },
                   }}
-                  className="  w-[98%]  shadow-md bg-white p-[10px] rounded-lg "
+                  className="  w-[98%] h-12  shadow-md bg-white p-[10px] rounded-lg "
                   onChange={handleCardChange}
                 />
                 <button
