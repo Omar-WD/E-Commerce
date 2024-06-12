@@ -19,7 +19,7 @@ export default function Product({product}) {
         {product.priceBeforeDisc !== 0 && <span className=" absolute text-center m-auto px-1 pt-[9px] h-11 w-11 -top-3 -right-3 bg-lightGreen text-white rounded-full z-30">Sale!</span>}
         <div className="productImgContents overflow-hidden lg:min-h-80 ">
             <img src={product.img} onClick={()=>navigate(`/product/${product._id}`)} alt="shoesImg" className="  hover:cursor-pointer hover:scale-[118%]  duration-300 ease-linear " />
-            <h5 className=" hidden xs:absolute bottom-0 w-full bg-neutral-600 text-white h-9 pt-1 opacity-0 transition-opacity duration-300 ease-in-out " onClick={handleQuickView}>Quick View</h5>
+            <h5 className=" hidden xs:block absolute bottom-0 w-full bg-neutral-600 text-white h-9 pt-1 opacity-0 transition-opacity duration-300 ease-in-out " onClick={handleQuickView}>Quick View</h5>
         </div>
         
 
