@@ -75,7 +75,7 @@ function App() {
         <div className={`${bgColorandOpacity}`}>
           <TopNav />
           <Routes>
-            <Route path="/" element={<ProductList products={products} />} />
+            <Route path="/" element={< LookBook/>} />
             <Route path="/shop" element={<ProductList products={products} />} />
             <Route
               path="/men"
