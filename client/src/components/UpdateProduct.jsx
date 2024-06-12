@@ -8,11 +8,8 @@ export default function UpdateProduct() {
   const navigate = useNavigate();
   const { register, handleSubmit, setValue } = useForm();
   const [sizes, setSizes] = useState([{ size: "", qty: "" }]);
-  const [category1, setCategory1] = useState([]);
-  const [category2, setCategory2] = useState([]);
-  const [category3, setCategory3] = useState([]);
+  const [categories, setCategories] = useState({ category1: [], category2: [], category3: [] });
   const { setAddedItemsCount } = useContext(ProductContext);
-  const [product, setProduct] = useState(null);
   const { id: productId } = useParams();
 
   useEffect(() => {
@@ -20,9 +17,7 @@ export default function UpdateProduct() {
       try {
         const response = await axiosClient.get(`/products/${productId}`);
         const productData = response.data;
-        setProduct(productData);
 
-        // Set the form values
         setValue("category1", productData.category1);
         setValue("category2", productData.category2);
         setValue("category3", productData.category3);
@@ -54,7 +49,6 @@ export default function UpdateProduct() {
   };
 
   const onSubmit = async (data) => {
-    console.log("data", data);
     const formData = new FormData();
     formData.append("category1", data.category1);
     formData.append("category2", data.category2);
@@ -65,10 +59,10 @@ export default function UpdateProduct() {
 
     if (data.priceBeforeDisc) {
       formData.append("priceBeforeDisc", data.priceBeforeDisc);
-    }else{
+    } else {
       formData.append("priceBeforeDisc", 0);
     }
-    
+
     if (data.image && data.image[0]) {
       formData.append("image", data.image[0]);
     }
@@ -77,7 +71,7 @@ export default function UpdateProduct() {
       size: Number(size.size),
       qty: Number(size.qty),
     }));
-    
+
     formData.append("sizes", JSON.stringify(sizesWithNumbers));
 
     try {
@@ -92,116 +86,60 @@ export default function UpdateProduct() {
     }
   };
 
-  const cat1 = async () => {
+  const fetchCategories = async () => {
     try {
-      const response = await axiosClient.get("/products/category1");
-      setCategory1(response.data);
-    } catch (error) {
-      console.error("Error:", error.response ? error.response.data : error.message);
-    }
-  };
+      const [cat1Res, cat2Res, cat3Res] = await Promise.all([
+        axiosClient.get("/products/category1"),
+        axiosClient.get("/products/category2"),
+        axiosClient.get("/products/category3"),
+      ]);
 
-  const cat2 = async () => {
-    try {
-      const response = await axiosClient.get("/products/category2");
-      setCategory2(response.data);
-    } catch (error) {
-      console.error("Error:", error.response ? error.response.data : error.message);
-    }
-  };
-
-  const cat3 = async () => {
-    try {
-      const response = await axiosClient.get("/products/category3");
-      setCategory3(response.data);
+      setCategories({
+        category1: cat1Res.data,
+        category2: cat2Res.data,
+        category3: cat3Res.data,
+      });
     } catch (error) {
       console.error("Error:", error.response ? error.response.data : error.message);
     }
   };
 
   useEffect(() => {
-    cat1();
-    cat2();
-    cat3();
+    fetchCategories();
   }, []);
 
-  const cat1Options = category1.map((cat1) => (
-    <option key={cat1._id} value={cat1._id}  >
-      {cat1.value}
-    </option>
-  ));
-
-  const cat2Options = category2.map((cat2) => (
-    <option key={cat2._id} value={cat2._id}>
-      {cat2.value}
-    </option>
-  ));
+  const addCategory = async (category, categoryName) => {
+    try {
+      const newCategory = prompt(`Enter new ${categoryName}`);
+      if (!newCategory) return; 
   
-  const cat3Options = category3.map((cat3) => (
-    <option key={cat3._id} value={cat3._id}>
-      {cat3.value}
-    </option>
-  ));
-
-  const handleAddToCategory1 = () => {
-    const newCategory1 = prompt("Enter new category 1");
-    if (
-      newCategory1 &&
-      newCategory1.trim() !== "" &&
-      newCategory1.length < 20 &&
-      newCategory1.length > 3 &&
-      category1.includes(newCategory1) === false
-    ) {
-      axiosClient
-        .post("/products/category1", { value: newCategory1 })
-        .then(() => {
-          cat1();
-        })
-        .catch((error) => {
-          console.error("Error:", error.response ? error.response.data : error.message);
-        });
+      if (
+        newCategory.trim() !== "" &&
+        newCategory.length >= 1 &&
+        newCategory.length <= 20 &&
+        !categories[category].some((cat) => cat.value === newCategory)
+      ) {
+        await axiosClient.post(`/products/${category}`, { value: newCategory })
+          .then(() => {
+            
+            fetchCategories();
+          });
+      } else {
+        console.error(`Invalid ${categoryName}: ${newCategory}`);
+      }
+    } catch (error) {
+      console.error("Error adding category:", error);
     }
   };
+  
+  
 
-  const handleAddToCategory2 = () => {
-    const newCategory2 = prompt("Enter new category 2");
-    if (
-      newCategory2 &&
-      newCategory2.trim() !== "" &&
-      newCategory2.length < 20 &&
-      newCategory2.length > 3 &&
-      category2.includes(newCategory2) === false
-    ) {
-      axiosClient
-        .post("/products/category2", { value: newCategory2 })
-        .then(() => {
-          cat2();
-        })
-        .catch((error) => {
-          console.error("Error:", error.response ? error.response.data : error.message);
-        });
-    }
-  };
-
-  const handleAddToCategory3 = () => {
-    const newCategory3 = prompt("Enter new category 3");
-    if (
-      newCategory3 &&
-      newCategory3.trim() !== "" &&
-      newCategory3.length < 20 &&
-      newCategory3.length > 3 &&
-      category3.includes(newCategory3) === false
-    ) {
-      axiosClient
-        .post("/products/category3", { value: newCategory3 })
-        .then(() => {
-          cat3();
-        })
-        .catch((error) => {
-          console.error("Error:", error.response ? error.response.data : error.message);
-        });
-    }
-  };
+  const catOptions = (category) =>
+    categories[category].map((cat) => (
+      <option key={cat._id} value={cat._id}>
+        {cat.value}
+      </option>
+    ));
 
   return (
     <form
@@ -213,13 +151,13 @@ export default function UpdateProduct() {
           className="w-[270px] h-10 p-2 rounded-md shadow-md"
           {...register("category1", { required: true })}
         >
-          <option value=""  >Select Category 1</option>
-          {cat1Options} 
+          <option value="">Select Category 1</option>
+          {catOptions("category1")}
         </select>
         <button
           type="button"
           className="text-2xl text-lightGray hover:text-dark"
-          onClick={handleAddToCategory1}
+          onClick={() => addCategory("category1", "category 1")}
         >
           +
         </button>
@@ -229,13 +167,13 @@ export default function UpdateProduct() {
           className="w-[270px] h-10 p-2 rounded-md shadow-md"
           {...register("category2", { required: true })}
         >
-          <option value=""  >Select Category 2</option>
-          {cat2Options}
+          <option value="">Select Category 2</option>
+          {catOptions("category2")}
         </select>
         <button
           type="button"
           className="text-2xl text-lightGray hover:text-dark"
-          onClick={handleAddToCategory2}
+          onClick={() => addCategory("category2", "category 2")}
         >
           +
         </button>
@@ -245,13 +183,13 @@ export default function UpdateProduct() {
           className="w-[270px] h-10 p-2 rounded-md shadow-md"
           {...register("category3", { required: true })}
         >
-          <option value="" >Select Category 3</option>
-          {cat3Options}
+          <option value="">Select Category 3</option>
+          {catOptions("category3")}
         </select>
         <button
           type="button"
           className="text-2xl text-lightGray hover:text-dark"
-          onClick={handleAddToCategory3}
+          onClick={() => addCategory("category3", "category 3")}
         >
           +
         </button>
@@ -260,20 +198,17 @@ export default function UpdateProduct() {
       <input
         className="w-[300px] h-10 p-2 rounded-md shadow-md"
         placeholder="Product name"
-        defaultValue={product?.name}
         {...register("name", { required: true, maxLength: 30 })}
       />
       <input
         className="w-[300px] h-10 p-2 rounded-md shadow-md"
         placeholder="Price"
-        defaultValue={product?.price}
         type="number"
-        {...register("price", { required: true, min: 3, max: 400 })}
+        {...register("price", { required: true, min: 2, max: 400 })}
       />
       <input
         className="w-[300px] h-10 p-2 rounded-md shadow-md"
         placeholder="Price before discount"
-        defaultValue={product?.priceBeforeDisc}
         type="number"
         {...register("priceBeforeDisc", { min: 0, max: 400 })}
       />
@@ -316,7 +251,6 @@ export default function UpdateProduct() {
       <input
         className="w-[300px] h-10 p-2 rounded-md shadow-md"
         placeholder="Product Description"
-        defaultValue={product?.description}
         {...register("description", { required: true })}
       />
       <input

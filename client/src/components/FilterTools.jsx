@@ -10,24 +10,29 @@ export default function FilterTools({ filterDispaly, setFilterDispaly }) {
   const [priceRange, setPriceRange] = useState(0);
 
   const currentLocation = location.pathname;
+  
+  const productWithoutDeleted = products.filter((product) => product.isDeleted === false);
+  useEffect(() => {
+    console.log(productWithoutDeleted.length);
+  }, [productWithoutDeleted.length]);
 
   const maxProductPrice =
-    products.length > 0
-      ? products.reduce((acc, product) => Math.max(acc, product.price), 0) + 1
+    productWithoutDeleted.length > 0
+      ? productWithoutDeleted.reduce((acc, product) => Math.max(acc, product.price), 0) + 1
       : 0;
   const minProductPrice =
-    products.length > 0
-      ? products.reduce(
+    productWithoutDeleted.length > 0
+      ? productWithoutDeleted.reduce(
           (acc, product) => Math.min(acc, product.price),
           Infinity
         )
       : 0;
 
   useEffect(() => {
-    if (products.length > 0) {
+    if (productWithoutDeleted.length > 0) {
       setPriceRange(maxProductPrice);
     }
-  }, [products, maxProductPrice]);
+  }, [maxProductPrice, productWithoutDeleted.length]);
 
   const handlePriceRange = (e) => {
     setPriceRange(e.target.value);
@@ -38,13 +43,13 @@ export default function FilterTools({ filterDispaly, setFilterDispaly }) {
     navigate('/')
   };
 
-  const productsCategories1 = products
+  const productsCategories1 = productWithoutDeleted
     .map((product) => product.category1.value)
     .filter((value, index, self) => self.indexOf(value) === index);
-  const productsCategories2 = products
+  const productsCategories2 = productWithoutDeleted
     .map((product) => product.category2.value)
     .filter((value, index, self) => self.indexOf(value) === index);
-  const filteredbyPrice = products.filter(
+  const filteredbyPrice = productWithoutDeleted.filter(
     (product) => product.price <= priceRange
   );
 

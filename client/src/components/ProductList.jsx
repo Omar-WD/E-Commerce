@@ -68,8 +68,8 @@ export default function ProductList({category2,products}) {
 
 
   return (
-    <div className= {`${bgColorandOpacity} w:auto md:w-5/6 mx-4 md:mx-auto min-h-[75vh] px-4  sm:px-16 py-8 md:py-16 my-7 md:my-14`} >
-        <h1 className=" text-4xl sm:text-5xl md:text-7xl font-bold text-lightGreen pb-6 sm:pb-8 md:pb-24">{location.pathname.split("/")[1].charAt(0).toUpperCase()+location.pathname.split("/")[1].slice(1) || "Shop"}</h1>
+    <div className= {`${bgColorandOpacity} w:auto md:w-5/6 mx-4 md:mx-auto min-h-[75vh] px-4  sm:px-16 py-8  my-7 md:my-14`} >
+        <h1 className=" text-4xl sm:text-5xl md:text-7xl font-bold text-lightGreen pb-6 sm:pb-8 ">{location.pathname.split("/")[1].charAt(0).toUpperCase()+location.pathname.split("/")[1].slice(1) || "Shop"}</h1>
         <div className="pb-10 sm:pb-20 flex flex-row flex-wrap items-center gap-4">
           <button onClick={()=>setFilterDispaly("block")} className=" bg-lightGreen text-white text-sm md:text-base md:w-48 h-10 px-4 font-semibold font-sans inline-flex items-center gap-2 "><FaBars /> FILTER SHOES</button>
           <span className=" text-lighterGreen text-md md:text-lg pl-3 md:pl-6 font-bold">Showing all {filteredProducts.length} results {shoes_type?<span>of type: <span className=" text-lightGreen">{shoes_type}</span></span>:""}</span>
