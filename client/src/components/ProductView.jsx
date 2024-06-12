@@ -18,6 +18,7 @@ export default function ProductView({ products }) {
   const {setAddSizeCount,handleDeleteProduct}=useContext(ProductContext)
   const {user}=useContext(UserContext)
   const [showAddSizeForm, setShowAddSizeForm] = useState(false);
+  const [showWarning, setShowWarning]=useState(false);
   const navigate=useNavigate()
 
   const product = products.find((product) => product._id == _id);
@@ -28,7 +29,10 @@ export default function ProductView({ products }) {
   const handleSelectSize = (e) => {
     setSlectedSize(e.target.textContent);
     setDisableButton(false);
+    setShowWarning(false);
   };
+
+  
 
   const handleOrderProduct = () => {
     const orderItem = {
@@ -151,7 +155,7 @@ export default function ProductView({ products }) {
                     )
                 )}
               </div>
-
+{showWarning && <div className="text-red-500 text-sm">Please select a size before adding to cart.</div>}
               <button
                 disabled={disableButton}
                 onClick={handleOrderProduct}
