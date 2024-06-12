@@ -1,6 +1,6 @@
- /* eslint-disable react/prop-types */
+/* eslint-disable react/prop-types */
 import { useParams } from "react-router-dom";
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState } from "react";
 import { OrderContext } from "../context/OrderProvider";
 import { ProductContext } from "../context/ProductProvider";
 import { UserContext } from "../context/UserProvider";
@@ -169,7 +169,6 @@ export default function ProductView({ products }) {
                 </div>
               )}
               <button
-                disabled={disableButton}
                 onClick={handleOrderProduct}
                 className="bg-lighterGreen text-white text-base h-6 lg:h-10 w-32 rounded-md mt-1 lg:mt-4 hover:bg-black"
               >
@@ -229,3 +228,4 @@ export default function ProductView({ products }) {
     </div>
   );
 }
+ 
