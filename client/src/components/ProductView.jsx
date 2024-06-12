@@ -34,7 +34,8 @@ export default function ProductView({ products }) {
 
   
 
-  const handleOrderProduct = () => {
+  if(selectedSize != ""){
+    const handleOrderProduct = () => {
     const orderItem = {
       productId: product._id,
       name: product.name,
@@ -44,8 +45,12 @@ export default function ProductView({ products }) {
       qty: 1,
     };
     setOrder([...order, orderItem]);
+      setShowWarning(false)
     navigate("/")
   };
+  }else{
+    setShowWarning(true)
+  }
 
   const handleConfirmAddSize = async(newSize,sizeQty) => {
     
