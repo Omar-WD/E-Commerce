@@ -29,7 +29,7 @@ export default function LookBook() {
   ];
   return (
     <div className="bg-white">
-      <h1 className="text-5xl md:text-7xl font-semibold text-dark text-center py-20">
+      <h1 className="text-3xl md:text-7xl font-semibold text-dark text-center py-10 md:py-20">
         Lookbook
       </h1>
       {lookbooks.map((item, index) => (
