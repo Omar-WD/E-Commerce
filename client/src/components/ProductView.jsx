@@ -45,7 +45,7 @@ export default function ProductView({ products }) {
       };
       setOrder([...order, orderItem]);
       setShowWarning(false);
-      navigate(`/${product.category2}`);
+      navigate(`/products/${product.category2}`);
     } else {
       setShowWarning(true);
     }
