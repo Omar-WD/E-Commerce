@@ -29,7 +29,7 @@ export default function ProductQuickView({
     };
     setOrder([...order, orderItem]);
     setQuickViewDisplay("hidden");
-    navigate("/")
+    navigate(`/${product.category2.value}`);
   };
 
  
