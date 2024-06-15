@@ -1,10 +1,29 @@
-const { Product, Cat1, Cat2, Cat3 } = require("../models/products");
+const { Product,Cat0, Cat1, Cat2, Cat3 } = require("../models/products");
 const fs = require("fs");
 
 // Category and Product Handlers
 
+const createCategory0 = async (req, res) => {
+    try {
+        const category0 = new Cat0(req.body);
+        await category0.save();
+        res.status(201).send(category0);
+    } catch (error) {
+        res.status(400).send(error);
+    }
+};
+
+const getCategory0 = async (req, res) => {
+    try {
+        const category0 = await Cat0.find();
+        res.send(category0);
+    } catch (error) {
+        res.status(400).send(error);
+    }
+};
+
+
 const createCategory1 = async (req, res) => {
-    console.log('req.body',req.body);
     try {
         const category1 = new Cat1(req.body);
         await category1.save();
@@ -65,6 +84,7 @@ const getCategory3 = async (req, res) => {
 
 const createProduct = async (req, res) => {
     const {
+        category0,
         category1,
         category2,
         category3,
@@ -84,6 +104,7 @@ const createProduct = async (req, res) => {
 
         // Create the product with parsed sizes and converted prices
         const product = new Product({
+            category0,
             category1,
             category2,
             category3,
@@ -105,6 +126,7 @@ const createProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
     const {
+        category0,
         category1,
         category2,
         category3,
@@ -114,15 +136,14 @@ const updateProduct = async (req, res) => {
         sizes,
         description,
     } = req.body;
-    console.log('req.body',req.body);
 
     try {
-        // Parse sizes if it's a JSON string
         let parsedSizes = sizes;
         if (typeof sizes === "string") {
             parsedSizes = JSON.parse(sizes);
         }
         const updatedData = {
+            category0: category0,
             category1: category1,
             category2: category2,
             category3: category3,
@@ -145,6 +166,7 @@ const updateProduct = async (req, res) => {
         }
 
         res.send(product);
+        fs.unlinkSync(req.file.localPath);
     } catch (error) {
         res.status(400).send(error);
     }
@@ -153,6 +175,7 @@ const updateProduct = async (req, res) => {
 const getProducts = async (req, res) => {
     try {
         const products = await Product.find()
+            .populate("category0")
             .populate("category1")
             .populate("category2")
             .populate("category3");
@@ -189,7 +212,6 @@ const deleteproductByID = async (req, res) => {
 };
 
 const decrementProductSizeQty = async (req, res) => {
-    console.log("Request Body:", req.body);
     const { items } = req.body;
 
     if (!Array.isArray(items)) {
@@ -208,7 +230,7 @@ const decrementProductSizeQty = async (req, res) => {
             }
 
             for (const sizeItem of item.sizes) {
-                if (!sizeItem.size || typeof sizeItem.qty !== "number") {
+                if (!sizeItem.size ||typeof sizeItem.size !== "string" || typeof sizeItem.qty !== "number") {
                     return res.status(400).send("Invalid size item structure");
                 }
 
@@ -231,7 +253,6 @@ const decrementProductSizeQty = async (req, res) => {
 
 const updateProductSizesQty = async (req, res) => {
     const { items } = req.body;
-    console.log("Request Body:", req.body);
 
     if (!Array.isArray(items)) {
         return res.status(400).send("Items must be an array");
@@ -249,7 +270,7 @@ const updateProductSizesQty = async (req, res) => {
             }
 
             for (const sizeItem of item.sizes) {
-                if (!sizeItem.size || typeof sizeItem.qty !== "number") {
+                if (!sizeItem.size ||typeof sizeItem.size !== "string" || typeof sizeItem.qty !== "number") {
                     return res.status(400).send("Invalid size item structure");
                 }
 
@@ -275,6 +296,8 @@ module.exports = {
     getProducts,
     getProductByID,
     deleteproductByID,
+    createCategory0,
+    getCategory0,
     createCategory3,
     getCategory3,
     createCategory2,

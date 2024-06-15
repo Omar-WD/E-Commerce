@@ -66,6 +66,9 @@ html {
 .sidebar.open {
   animation: moveFromLeft 0.5s ease-in-out; 
 }
+.productsDiv{
+  scrollbar-width: none;;
+}
 
 
 

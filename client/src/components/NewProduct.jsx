@@ -1,14 +1,14 @@
 import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { axiosClient } from "../axiosClient";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { ProductContext } from "../context/ProductProvider";
 
 export default function NewProduct() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { register, handleSubmit } = useForm();
   const [sizes, setSizes] = useState([{ size: "", qty: "" }]);
-  const [categories, setCategories] = useState({ category1: [], category2: [], category3: [] });
+  const [categories, setCategories] = useState({ category0:[], category1: [], category2: [], category3: [] });
   const { setAddedItemsCount } = useContext(ProductContext);
 
   useEffect(() => {
@@ -17,10 +17,11 @@ export default function NewProduct() {
 
   const fetchCategories = async () => {
     try {
+      const response0 = await axiosClient.get("/products/category0");
       const response1 = await axiosClient.get("/products/category1");
       const response2 = await axiosClient.get("/products/category2");
       const response3 = await axiosClient.get("/products/category3");
-      setCategories({ category1: response1.data, category2: response2.data, category3: response3.data });
+      setCategories({ category0:response0.data, category1: response1.data, category2: response2.data, category3: response3.data });
     } catch (error) {
       console.error("Error:", error.response ? error.response.data : error.message);
     }
@@ -61,6 +62,7 @@ export default function NewProduct() {
   // Handle form submission
   const onSubmit = async (data) => {
     const formData = new FormData();
+    formData.append("category0", data.category0);
     formData.append("category1", data.category1);
     formData.append("category2", data.category2);
     formData.append("category3", data.category3);
@@ -72,12 +74,10 @@ export default function NewProduct() {
 
     // Convert sizes to JSON with numbers
     const sizesWithNumbers = sizes.map((size) => ({
-      size: Number(size.size),
+      size: size.size,
       qty: Number(size.qty),
     }));
     formData.append("sizes", JSON.stringify(sizesWithNumbers));
-    console.log('formData',formData);
-    console.log('data',data);
 
     try {
       await axiosClient.post("/products", formData, {
@@ -85,7 +85,7 @@ export default function NewProduct() {
       });
       alert("Product added successfully");
       setAddedItemsCount((prev) => prev + 1);
-      navigate("/");
+      // navigate("/shop");
     } catch (error) {
       console.error(
         "Error:",
@@ -106,6 +106,21 @@ export default function NewProduct() {
       onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col gap-6 items-center justify-center py-6"
     >
+      <div className="inline-flex gap-4">
+        <select
+          className="w-[270px] h-10 p-2 rounded-md shadow-md"
+          {...register("category0", { required: true })}
+        >
+          <option value="">Select Category 0</option>
+          {categoryOptions(categories.category0)}
+        </select>
+        <button
+          className="text-2xl text-lightGray hover:text-dark"
+          onClick={() => handleAddToCategory("category0")}
+        >
+          +
+        </button>
+      </div>
       <div className="inline-flex gap-4">
         <select
           className="w-[270px] h-10 p-2 rounded-md shadow-md"
@@ -176,7 +191,7 @@ export default function NewProduct() {
           <input
             className="w-[135px] h-10 p-2 rounded-md shadow-md"
             placeholder="Size"
-            type="number"
+            type="string"
             name="size"
             value={size.size}
             onChange={(event) => handleSizeChange(index, event)}

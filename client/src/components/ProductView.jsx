@@ -13,7 +13,6 @@ import { axiosClient } from "../axiosClient";
 export default function ProductView({ products }) {
   const { _id } = useParams();
   const [selectedSize, setSelectedSize] = useState("");
-  const [disableButton, setDisableButton] = useState(true);
   const [showAddSizeForm, setShowAddSizeForm] = useState(false);
   const [showWarning, setShowWarning] = useState(false);
   const navigate = useNavigate();
@@ -29,7 +28,6 @@ export default function ProductView({ products }) {
 
   const handleSelectSize = (e) => {
     setSelectedSize(e.target.textContent);
-    setDisableButton(false);
     setShowWarning(false);
   };
 
@@ -58,7 +56,7 @@ export default function ProductView({ products }) {
           items: [
             {
               productId: product._id,
-              sizes: [{ size: Number(newSize), qty: Number(sizeQty) }],
+              sizes: [{ size: newSize, qty: Number(sizeQty) }],
             },
           ],
         });

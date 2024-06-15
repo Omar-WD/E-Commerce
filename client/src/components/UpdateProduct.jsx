@@ -8,7 +8,7 @@ export default function UpdateProduct() {
   const navigate = useNavigate();
   const { register, handleSubmit, setValue } = useForm();
   const [sizes, setSizes] = useState([{ size: "", qty: "" }]);
-  const [categories, setCategories] = useState({ category1: [], category2: [], category3: [] });
+  const [categories, setCategories] = useState({category0: [], category1: [], category2: [], category3: [] });
   const { setAddedItemsCount } = useContext(ProductContext);
   const { id: productId } = useParams();
 
@@ -18,6 +18,7 @@ export default function UpdateProduct() {
         const response = await axiosClient.get(`/products/${productId}`);
         const productData = response.data;
 
+        setValue("category0", productData.category0);
         setValue("category1", productData.category1);
         setValue("category2", productData.category2);
         setValue("category3", productData.category3);
@@ -50,6 +51,7 @@ export default function UpdateProduct() {
 
   const onSubmit = async (data) => {
     const formData = new FormData();
+    formData.append("category0", data.category0);
     formData.append("category1", data.category1);
     formData.append("category2", data.category2);
     formData.append("category3", data.category3);
@@ -68,7 +70,7 @@ export default function UpdateProduct() {
     }
 
     const sizesWithNumbers = sizes.map((size) => ({
-      size: Number(size.size),
+      size: size.size,
       qty: Number(size.qty),
     }));
 
@@ -80,7 +82,7 @@ export default function UpdateProduct() {
       });
       alert("Product updated successfully");
       setAddedItemsCount((prev) => prev + 1);
-      navigate("/");
+      navigate("/shop");
     } catch (error) {
       console.error("Error:", error.response ? error.response.data : error.message);
     }
@@ -88,13 +90,15 @@ export default function UpdateProduct() {
 
   const fetchCategories = async () => {
     try {
-      const [cat1Res, cat2Res, cat3Res] = await Promise.all([
+      const [cat0Res, cat1Res, cat2Res, cat3Res] = await Promise.all([
+        axiosClient.get("/products/category0"),
         axiosClient.get("/products/category1"),
         axiosClient.get("/products/category2"),
         axiosClient.get("/products/category3"),
       ]);
 
       setCategories({
+        category0: cat0Res.data,
         category1: cat1Res.data,
         category2: cat2Res.data,
         category3: cat3Res.data,
@@ -146,6 +150,22 @@ export default function UpdateProduct() {
       onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col gap-6 items-center justify-center py-6"
     >
+      <div className="inline-flex gap-4">
+        <select
+          className="w-[270px] h-10 p-2 rounded-md shadow-md"
+          {...register("category0", { required: true })}
+        >
+          <option value="">Select Category 0</option>
+          {catOptions("category0")}
+        </select>
+        <button
+          type="button"
+          className="text-2xl text-lightGray hover:text-dark"
+          onClick={() => addCategory("category0", "category 0")}
+        >
+          +
+        </button>
+      </div>
       <div className="inline-flex gap-4">
         <select
           className="w-[270px] h-10 p-2 rounded-md shadow-md"
@@ -223,7 +243,7 @@ export default function UpdateProduct() {
           <input
             className="w-[135px] h-10 p-2 rounded-md shadow-md"
             placeholder="Size"
-            type="number"
+            type="string"
             name="size"
             value={size.size}
             onChange={(event) => handleSizeChange(index, event)}

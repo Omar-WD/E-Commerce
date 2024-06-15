@@ -43,6 +43,9 @@ export default function FilterTools({ filterDispaly, setFilterDispaly }) {
     navigate('/')
   };
 
+  const productsCategories0 = productWithoutDeleted
+    .map((product) => product.category0.value)
+    .filter((value, index, self) => self.indexOf(value) === index);
   const productsCategories1 = productWithoutDeleted
     .map((product) => product.category1.value)
     .filter((value, index, self) => self.indexOf(value) === index);
@@ -52,6 +55,8 @@ export default function FilterTools({ filterDispaly, setFilterDispaly }) {
   const filteredbyPrice = productWithoutDeleted.filter(
     (product) => product.price <= priceRange
   );
+
+
 
   return (
     <div
@@ -116,17 +121,46 @@ export default function FilterTools({ filterDispaly, setFilterDispaly }) {
                     })
                   </button>
                   {filteredbyPrice &&
+                    productsCategories0.map((category0, index2) => (
+                      <div
+                        key={index2}
+                        className="flex flex-col items-start pl-10 "
+                      >
+                        <button onClick={()=>{navigate(`/${category2}/?max_price=${priceRange}&cat0=${category0}`),setFilterDispaly("hidden")}}>
+                          {filteredbyPrice.filter(
+                            (product) =>
+                              product.category0.value === category0 &&
+                              product.category2.value ===
+                                productsCategories2[index1]
+                          ).length > 0
+                            ? category0
+                            : ""}{" "}
+                          {filteredbyPrice.filter(
+                            (product) =>
+                              product.category0.value === category0 &&
+                              product.category2.value ===
+                                productsCategories2[index1]
+                          ).length > 0
+                            ? <span>({filteredbyPrice.filter(
+                              (product) =>
+                                product.category0.value === category0 &&
+                                product.category2.value ===
+                                  productsCategories2[index1]
+                            ).length})</span>
+                            : ""}
+                        </button>
+                        {filteredbyPrice &&
                     productsCategories1.map((category1, index2) => (
                       <div
                         key={index2}
                         className="flex flex-col items-start pl-10 "
                       >
-                        <button onClick={()=>{navigate(`/${category2}/?max_price=${priceRange}&shoes_type=${category1}`),setFilterDispaly("hidden")}}>
+                        <button onClick={()=>{navigate(`/${category2}/?max_price=${priceRange}&cat0=${category0}&shoes_type=${category1}`),setFilterDispaly("hidden")}}>
                           {filteredbyPrice.filter(
                             (product) =>
                               product.category1.value === category1 &&
                               product.category2.value ===
-                                productsCategories2[index1]
+                                productsCategories2[index1] && product.category0.value === category0
                           ).length > 0
                             ? category1
                             : ""}{" "}
@@ -135,15 +169,19 @@ export default function FilterTools({ filterDispaly, setFilterDispaly }) {
                               product.category1.value === category1 &&
                               product.category2.value ===
                                 productsCategories2[index1]
+                                && product.category0.value === category0
                           ).length > 0
                             ? <span>({filteredbyPrice.filter(
                               (product) =>
                                 product.category1.value === category1 &&
                                 product.category2.value ===
                                   productsCategories2[index1]
+                                  && product.category0.value === category0
                             ).length})</span>
                             : ""}
                         </button>
+                      </div>
+                    ))}
                       </div>
                     ))}
                 </div>

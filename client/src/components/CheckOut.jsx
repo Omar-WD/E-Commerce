@@ -104,7 +104,7 @@ export default function CheckOut() {
           productId: orderItem.productId,
           sizes: [
             {
-              size: Number(orderItem.selectedSize),
+              size: orderItem.selectedSize,
               qty: orderItem.qty,
             },
           ],

@@ -1,5 +1,13 @@
 const mongoose = require('mongoose');
 
+const category0Schema = new mongoose.Schema({
+    value: {
+        type: String,
+        unique: true,
+        default: 'No category0'
+    }
+});
+
 const category1Schema = new mongoose.Schema({
     value: {
         type: String,
@@ -23,6 +31,11 @@ const category3Schema = new mongoose.Schema({
 });
 
 const productSchema = new mongoose.Schema({
+    category0: {
+        type:mongoose.Schema.Types.ObjectId,
+        ref: 'Cat0',
+        required: true
+    },
     category1: {
         type:mongoose.Schema.Types.ObjectId,
         ref: 'Cat1',
@@ -54,7 +67,7 @@ const productSchema = new mongoose.Schema({
     sizes:[
         {
             size: {
-                type: Number,
+                type: String,
                 required: true
             },
             qty: {
@@ -81,8 +94,10 @@ const productSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 const Product = mongoose.model('Product', productSchema);
+const Cat0 = mongoose.model('Cat0', category0Schema);
 const Cat1 = mongoose.model('Cat1', category1Schema);
 const Cat2 = mongoose.model('Cat2', category2Schema);
 const Cat3 = mongoose.model('Cat3', category3Schema);
 
-module.exports = { Product,Cat1,Cat2,Cat3};
+
+module.exports = { Product,Cat0,Cat1,Cat2,Cat3};

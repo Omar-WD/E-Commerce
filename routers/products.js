@@ -1,5 +1,5 @@
 const express = require('express');
-const {createProduct, getProducts, getProductByID,deleteproductByID,createCategory1,getCategory1,createCategory2,getCategory2,createCategory3,getCategory3,updateProduct,decrementProductSizeQty,updateProductSizesQty} = require('../controllers/products');
+const {createProduct, getProducts, getProductByID,deleteproductByID, createCategory0,getCategory0,createCategory1,getCategory1,createCategory2,getCategory2,createCategory3,getCategory3,updateProduct,decrementProductSizeQty,updateProductSizesQty} = require('../controllers/products');
 const upload = require('../middlewares/multer_image_upload');
 const {cloudinaryUpload}= require('../middlewares/cloudinary');
 const {verifyToken} = require('../middlewares/verifyToken');
@@ -8,6 +8,8 @@ const {authorize} = require('../middlewares/authorize');
 
 const productRouter = express.Router();
 
+productRouter.post('/category0',verifyToken,authorize("admin"), createCategory0);
+productRouter.get('/category0', getCategory0);
 productRouter.post('/category1',verifyToken,authorize("admin"), createCategory1);
 productRouter.get('/category1', getCategory1);
 productRouter.post('/category2',verifyToken,authorize("admin"), createCategory2);

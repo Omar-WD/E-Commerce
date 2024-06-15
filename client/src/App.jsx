@@ -114,7 +114,7 @@ function App() {
         
         <FaArrowAltCircleUp
           onClick={handleScrollToTop}
-          className={` ${arrowDisplay} fixed right-10 bottom-20 size-10 text-red-600 cursor-pointer hover:text-red-800`}
+          className={`  hidden md:${arrowDisplay} fixed right-10 bottom-20 size-10 text-red-600 cursor-pointer hover:text-red-800`}
         />
       </Elements>
     );
