@@ -15,7 +15,7 @@ app.use(express.static(path.join(__dirname, "client", "dist")))
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://e-commerce-kbkd.onrender.com"],
+    origin: ["http://localhost:5173",`http://localhost:${port}`, "https://e-commerce-1-6kw7.onrender.com"],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
     optionsSuccessStatus: 204,
