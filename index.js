@@ -8,49 +8,59 @@ const userRouter = require("./routers/users");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const port = process.env.PORT || 5000;
 const path = require("path");
-require("./db");
+const mongoose = require('mongoose');
+
+// Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI, {
+useNewUrlParser: true,
+useUnifiedTopology: true
+})
+.then(() => console.log('DB Connected'))
+.catch(err => console.error("Error connecting to MongoDB", err));
 
 const app = express();
-app.use(express.static(path.join(__dirname, "client", "dist")))
+
+// Serve static files from the 'client/dist' directory
+app.use(express.static(path.join(__dirname, "client", "dist")));
 
 app.use(
-  cors({
-    origin: ["http://localhost:5173", "https://e-commerce-kbkd.onrender.com"],
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    credentials: true,
-    optionsSuccessStatus: 204,
-  })
+cors({
+origin: ["http://localhost:5173", "https://b.radwantravel.com"],
+methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+credentials: true,
+optionsSuccessStatus: 204,
+})
 );
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+
 
 app.use("/api/orders", orderRouter);
 app.use("/api/products", productRouter);
 app.use("/api/users", userRouter);
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+res.send("Hello World!");
 });
 
 app.post("/api/payment/create-payment-intent", async (req, res) => {
-  const { amount } = req.body;
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount,
-    currency: "eur",
-  });
-  res.send({
-    clientSecret: paymentIntent.client_secret,
-  });
+const { amount } = req.body;
+const paymentIntent = await stripe.paymentIntents.create({
+amount,
+currency: "eur",
+});
+res.send({
+clientSecret: paymentIntent.client_secret,
+});
 });
 
-app.get("*", (req, res)=>{
-    res.sendFile(path.join(__dirname, "client", "dist", "index.html" ))
-  }) 
-
-
-
+// Serve your React or frontend application
+app.get("*", (req, res) => {
+res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+});
 
 app.listen(port, () => {
-  console.log(`Server is running on port http://localhost:${port}`);
+console.log(Server is running on port http://localhost:${port});
 });
