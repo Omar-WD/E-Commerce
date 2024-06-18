@@ -7,8 +7,7 @@
     "server": "node index.js",
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "start": "nodemon index.js",
-    "build": "netlify-lambda build functions"
+    "start": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
