@@ -19,19 +19,21 @@ export default function UserProvider({ children }) {
       try {
         const response = await axiosClient.get("/users/profile");
         setUser(response.data);
+        setSignedIn(true);
       } catch (error) {
         console.error("Error fetching user profile:", error);
       } finally {
         setIsLoading(false);
       }
     };
-    if( window.location.pathname !== '/signin' ){
-    fetchUser();}
-    else{
+
+    if (signedIn) {
+      fetchUser();
+    } else {
       setIsLoading(false);
     }
-    
-  }, [setUser]);
+  }, [signedIn]);
+  
 
   const signin = (data) => {
     axiosClient
