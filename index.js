@@ -18,7 +18,7 @@ mongoose.connect(process.env.MONGO_URI, {})
 const app = express();
 
 
-// app.use(express.static(path.join(__dirname, "client", "dist")));
+app.use(express.static(path.join(__dirname, "client", "dist")));
 
 app.use(
 cors({
@@ -50,9 +50,9 @@ clientSecret: paymentIntent.client_secret,
 });
 
 
-// app.get("*", (req, res) => {
-// res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
-// });
+app.get("*", (req, res) => {
+res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+});
 
 app.listen(port, () => {
 console.log(`Server is running on port http://localhost:${port}`);
