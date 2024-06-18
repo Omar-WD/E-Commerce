@@ -10,15 +10,15 @@ const port = process.env.PORT || 5000;
 const path = require("path");
 const mongoose = require('mongoose');
 
-// Connect to MongoDB
+
 mongoose.connect(process.env.MONGO_URI, {})
   .then(() => console.log('DB Connected'))
   .catch(err => console.error("Error connecting to MongoDB", err));
 
 const app = express();
 
-// Serve static files from the 'client/dist' directory
-app.use(express.static(path.join(__dirname, "client", "dist")));
+
+// app.use(express.static(path.join(__dirname, "client", "dist")));
 
 app.use(
 cors({
@@ -49,7 +49,7 @@ clientSecret: paymentIntent.client_secret,
 });
 });
 
-// Serve your React or frontend application
+
 // app.get("*", (req, res) => {
 // res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
 // });
