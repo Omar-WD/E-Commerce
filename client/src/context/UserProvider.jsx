@@ -20,17 +20,18 @@ export default function UserProvider({ children }) {
         const response = await axiosClient.get("/users/profile");
         setUser(response.data);
         setSignedIn(true);
+        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching user profile:", error);
         if (error.response && error.response.status === 401) {
+          // Unauthorized, handle as needed (clear user data, set signedIn false)
           setUser(null);
           setSignedIn(false);
         }
-      } finally {
         setIsLoading(false);
       }
     };
-    
+  
     if (signedIn) {
       fetchUser();
     } else {
