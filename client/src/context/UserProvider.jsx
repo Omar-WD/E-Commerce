@@ -22,11 +22,15 @@ export default function UserProvider({ children }) {
         setSignedIn(true);
       } catch (error) {
         console.error("Error fetching user profile:", error);
+        if (error.response && error.response.status === 401) {
+          setUser(null);
+          setSignedIn(false);
+        }
       } finally {
         setIsLoading(false);
       }
     };
-
+    
     if (signedIn) {
       fetchUser();
     } else {
