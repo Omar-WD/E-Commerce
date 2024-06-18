@@ -41,10 +41,6 @@ app.use("/api/orders", orderRouter);
 app.use("/api/products", productRouter);
 app.use("/api/users", userRouter);
 
-app.get("/", (req, res) => {
-res.send("Hello World!");
-});
-
 app.post("/api/payment/create-payment-intent", async (req, res) => {
 const { amount } = req.body;
 const paymentIntent = await stripe.paymentIntents.create({
@@ -62,5 +58,5 @@ res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
 });
 
 app.listen(port, () => {
-console.log(Server is running on port http://localhost:${port});
+console.log(`Server is running on port http://localhost:${port}`);
 });
