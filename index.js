@@ -15,7 +15,7 @@ app.use(express.static(path.join(__dirname, "client", "dist")))
 
 app.use(
   cors({
-    origin: ["http://localhost:5173",`http://localhost:${port}`, "https://a.radwantravel.com"],
+    origin: ["http://localhost:5173",`http://localhost:${port}`, "https://a.radwantravel.com","https://b.radwantravel.com"],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
     optionsSuccessStatus: 204,
@@ -29,9 +29,7 @@ app.use("/api/orders", orderRouter);
 app.use("/api/products", productRouter);
 app.use("/api/users", userRouter);
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+
 
 app.post("/api/payment/create-payment-intent", async (req, res) => {
   const { amount } = req.body;
@@ -44,9 +42,9 @@ app.post("/api/payment/create-payment-intent", async (req, res) => {
   });
 });
 
-app.get("*", (req, res)=>{
-    res.sendFile(path.join(__dirname, "client", "dist", "index.html" ))
-  }) 
+// app.get("*", (req, res)=>{
+//     res.sendFile(path.join(__dirname, "client", "dist", "index.html" ))
+//   }) 
 
 
 
