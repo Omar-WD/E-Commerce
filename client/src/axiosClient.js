@@ -1,6 +1,6 @@
 import axios from 'axios';
 
 export const axiosClient = axios.create({
-    baseURL: 'https://e-commerce-kbkd.onrender.com/api',
+    baseURL: 'https://b.radwantravel.com/api',
     withCredentials: true,
     });
