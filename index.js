@@ -5,15 +5,13 @@ const cookieParser = require("cookie-parser");
 const orderRouter = require("./routers/orders");
 const productRouter = require("./routers/products");
 const userRouter = require("./routers/users");
+require("./db");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const port = process.env.PORT || 5000;
 const path = require("path");
-const mongoose = require('mongoose');
 
 
-mongoose.connect(process.env.MONGO_URI, {})
-  .then(() => console.log('DB Connected'))
-  .catch(err => console.error("Error connecting to MongoDB", err));
+
 
 const app = express();
 
