@@ -20,7 +20,7 @@ app.use(express.static(path.join(__dirname, "client", "dist")));
 
 app.use(
 cors({
-origin: ["http://localhost:5173", "https://b.radwantravel.com"],
+origin: ["http://localhost:5173", "https://a.radwantravel.com"],
 methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
 credentials: true,
 optionsSuccessStatus: 204,
